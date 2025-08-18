@@ -15,11 +15,25 @@ test('Verify Search button is operational and able to search and get the result 
     const iconByRole = page.getByRole('button', { name: 'search' });
     await iconByRole.click();
     //Fill the search input with 'India'
-    await page.getByRole('combobox').fill('India');
+    // We can use getByRole or else we can also use getByPlaceholder
+    //await page.getByRole('combobox').fill('India');
+    
+    
+    const searchinput = page.getByPlaceholder('Search our site');
+    await searchinput.fill('India')
+    await searchinput.press('Enter');
+
+    // To pause the execution and see the result
+    // await page.pause();
+    // we can use .press enter as above or else we can also use the below code getByRole
     // Click the search button 
     //Search is not unique, so using a more specific selector
-    await page.locator('.search-input-form').getByRole('button', { name: 'Search' }).click();
+    //await page.locator('.search-input-form').getByRole('button', { name: 'Search' }).click();
     // Verify that the search results are displayed
-    await expect (page.locator('text=items found')).toBeVisible();
-
+    //await expect (page.locator('text=items found')).toBeVisible();
+    // we can also write the above line as below
+    // await expect(page.getByText('items found')).toBeVisible();
+    await expect(page.locator('.search-result__summary-total')).toContainText('items found');
+    await page.pause();
 })
+
